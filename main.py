@@ -61,7 +61,18 @@ python -m pyserini.index.lucene \
 from pyserini.search.lucene import LuceneSearcher
 
 searcher = LuceneSearcher('indexes/sample_collection_jsonl')
-hits = searcher.search('cat')
 
-for i in range(len(hits)):
+queries = [
+  'dog AND cat',
+  'dog OR cat',
+  'dog AND NOT cat',
+  '(bm25 OR tf-idf) AND retrieval'
+]
+
+for query in queries:
+  hits = searcher.search(query)
+  print(f'\n{query}:')
+
+  for i in range(len(hits)):
     print(f'{i+1:2} {hits[i].docid:4} {hits[i].score:.5f}')
+# %%
