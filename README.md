@@ -5,6 +5,7 @@ Tugas mata kuliah Temu Kembali Informasi. Tujuan dari tugas ini adalah untuk mem
 ### 1. Clone Repository
 ```
 git clone https://github.com/lituldust/boolean-retrieval
+cd boolean-retrieval
 ```
 ### 2. Create Virtual Environment
 ```
