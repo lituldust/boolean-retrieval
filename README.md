@@ -5,12 +5,14 @@ Tugas mata kuliah Temu Kembali Informasi. Tujuan dari tugas ini adalah untuk mem
 ### 1. Clone Repository
 ```
 git clone https://github.com/lituldust/boolean-retrieval
+cd boolean-retrieval
 ```
 ### 2. Create Virtual Environment
 ```
 python -m venv .venv
+.venv/scripts/activate
 ```
 ### 3. Install Required Package
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
