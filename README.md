@@ -10,6 +10,7 @@ cd boolean-retrieval
 ### 2. Create Virtual Environment
 ```
 python -m venv .venv
+.venv/scripts/activate
 ```
 ### 3. Install Required Package
 ```
