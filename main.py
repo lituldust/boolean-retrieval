@@ -3,6 +3,7 @@ import pandas as pd
 import pyserini
 from pyserini.analysis import Analyzer, get_lucene_analyzer
 import json
+import os
 # %%
 # List dari file corpus-assignment#1.txt
 docs = [
@@ -28,7 +29,12 @@ df
 # %% Preprocessing
 # Nanti isi proses preprocessing pake Analyzer dari pyserini aja
 # %% Indexing - Make .jsonl file
-output_file = 'index.jsonl'
+output_file = 'test/index.jsonl'
+output_dir = os.path.dirname(output_file)
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+    print(f"Created directory: {output_dir}")
 
 with open(output_file, 'w') as f:
     for index, row in df.iterrows():
@@ -38,6 +44,24 @@ with open(output_file, 'w') as f:
         }
         json_string = json.dumps(json_record)
         f.write(json_string + '\n')
-# %% Indexing - 
+#%%
+'''
+Default Indexing dari pyserini tapi tambahin stemming, jalanin di terminal
 
+python -m pyserini.index.lucene \
+  --collection JsonCollection \
+  --input {path ke file index.jsonl} \
+  --index indexes/sample_collection_jsonl \
+  --generator DefaultLuceneDocumentGenerator \
+  --stemmer porter \
+  --threads 1 \
+  --storePositions --storeDocvectors --storeRaw
+'''
 # %% Boolean Retrieval
+from pyserini.search.lucene import LuceneSearcher
+
+searcher = LuceneSearcher('indexes/sample_collection_jsonl')
+hits = searcher.search('cat')
+
+for i in range(len(hits)):
+    print(f'{i+1:2} {hits[i].docid:4} {hits[i].score:.5f}')
