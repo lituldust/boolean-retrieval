@@ -1,3 +1,4 @@
 pyserini
 pandas
 ipykernel
+nltk

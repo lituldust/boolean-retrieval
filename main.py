@@ -1,9 +1,13 @@
 #%% Import Library
 import pandas as pd
+import nltk
 import pyserini
 from pyserini.analysis import Analyzer, get_lucene_analyzer
 import json
 import os
+import string
+# %%
+nltk.download('stopwords')  # Download stopwords if not already downloaded
 # %%
 # List dari file corpus-assignment#1.txt
 docs = [
@@ -27,7 +31,9 @@ docs = [
 df = pd.DataFrame(docs, columns=['doc_id', 'doc_text'])
 df
 # %% Preprocessing
-# Nanti isi proses preprocessing pake Analyzer dari pyserini aja
+df['doc_text'] = df['doc_text'].apply(lambda x: x.lower())  # Lowercase
+df['doc_text'] = df['doc_text'].apply(lambda x: ' '.join([word for word in x.split() if word not in nltk.corpus.stopwords.words('english')])) # Remove Stopword
+df['doc_text'] = df['doc_text'].apply(lambda x: ''.join([char for char in x if char not in string.punctuation])) # Remove Punctuation
 # %% Indexing - Make .jsonl file
 output_file = 'test/index.jsonl'
 output_dir = os.path.dirname(output_file)
