@@ -1,5 +1,5 @@
 # Boolean Retrieval
-Tugas mata kuliah Temu Kembali Informasi. Tujuan dari tugas ini adalah untuk memperkenalkan Anda pada dasar-dasar Pengambilan Boolean dan proses membangun indeks mesin pencari sederhana menggunakan pustaka Pyserini (antarmuka Python untuk Lucene/Anserini).
+Tugas mata kuliah Temu Kembali Informasi. Tujuan dari tugas ini adalah untuk mempelajari dasar-dasar Pengambilan Boolean dan proses membangun indeks mesin pencari sederhana menggunakan pustaka Pyserini (antarmuka Python untuk Lucene/Anserini).
 
 ## Setup
 ### 1. Clone Repository
