@@ -112,15 +112,17 @@ builder_1.add(querybuilder.get_term_query("dog"), must)
 builder_1.add(querybuilder.get_term_query("cat"), must)
 query_1 = builder_1.build()
 hits_1 = searcher.search(query_1)
+
 # %% Query 2 - dog OR cat
 builder_2 = querybuilder.get_boolean_query_builder()
 builder_2.add(querybuilder.get_term_query("dog"), should)
 builder_2.add(querybuilder.get_term_query("cat"), should)
 query_2 = builder_2.build()
 hits_2 = searcher.search(query_2)
+
 # %% Query 3 - dog AND NOT cat
 builder_3 = querybuilder.get_boolean_query_builder()
-builder_3.add(querybuilder.get_term_query("dog"), should)
+builder_3.add(querybuilder.get_term_query("dog"), must)
 builder_3.add(querybuilder.get_term_query("cat"), must_not)
 query_3 = builder_3.build()
 hits_3 = searcher.search(query_3)
