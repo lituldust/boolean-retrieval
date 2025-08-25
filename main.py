@@ -90,9 +90,9 @@ queries = [
 ]
 
 # %% Definisikan Logical Operator
-should = querybuilder.JBooleanClauseOccur['should'].value
-must = querybuilder.JBooleanClauseOccur['must'].value
-must_not = querybuilder.JBooleanClauseOccur['must_not'].value
+should = querybuilder.JBooleanClauseOccur['should'].value # OR
+must = querybuilder.JBooleanClauseOccur['must'].value # AND
+must_not = querybuilder.JBooleanClauseOccur['must_not'].value # NOT
 # %% Fungsi untuk print hasil pencarian
 def display_results(query, hits):
   print(f'\n{query}:')
