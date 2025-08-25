@@ -93,7 +93,7 @@ queries = [
 for query in queries:
   hits = searcher.search(query)
   print(f'\n{query}:')
-  print('  ', 'Id', ' ', 'Teks')
+  print('  ', 'Id', ' ', 'Score', ' ', 'Teks')
 
   for i in range(len(hits)):
     print(f'{i+1:2} {hits[i].docid:4} {hits[i].score:.5f} {df[df['doc_id'] == hits[i].docid]['doc_text'].values[0]}')
