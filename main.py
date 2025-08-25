@@ -76,7 +76,7 @@ python -m pyserini.index.lucene \
   --storePositions --storeDocvectors --storeRaw
 '''
 # %% Boolean Retrieval
-from pyserini.search.lucene import LuceneSearcher
+from pyserini.search.lucene import LuceneSearcher, querybuilder
 
 searcher = LuceneSearcher('indexes/sample_collection_jsonl')
 
@@ -89,11 +89,87 @@ queries = [
   'retrieval AND (neural OR bm25)'
 ]
 
-# %% Print hasil pencarian
-for query in queries:
-  hits = searcher.search(query)
+# %% Definisikan Logical Operator
+should = querybuilder.JBooleanClauseOccur['should'].value
+must = querybuilder.JBooleanClauseOccur['must'].value
+must_not = querybuilder.JBooleanClauseOccur['must_not'].value
+# %% Fungsi untuk print hasil pencarian
+def display_results(query, hits):
   print(f'\n{query}:')
-  print('  ', 'Id', ' ', 'Score', ' ', 'Teks')
 
+  if not hits:
+      print("Tidak ada dokumen yang sesuai.")
+      return
+  
+  print('  ', 'Id', ' ', 'Score', ' ', 'Teks')
+  
   for i in range(len(hits)):
     print(f'{i+1:2} {hits[i].docid:4} {hits[i].score:.5f} {df[df['doc_id'] == hits[i].docid]['doc_text'].values[0]}')
+  print("-"*100)
+# %% Query 1 - dog AND cat
+builder_1 = querybuilder.get_boolean_query_builder()
+builder_1.add(querybuilder.get_term_query("dog"), must)
+builder_1.add(querybuilder.get_term_query("cat"), must)
+query_1 = builder_1.build()
+hits_1 = searcher.search(query_1)
+# %% Query 2 - dog OR cat
+builder_2 = querybuilder.get_boolean_query_builder()
+builder_2.add(querybuilder.get_term_query("dog"), should)
+builder_2.add(querybuilder.get_term_query("cat"), should)
+query_2 = builder_2.build()
+hits_2 = searcher.search(query_2)
+# %% Query 3 - dog AND NOT cat
+builder_3 = querybuilder.get_boolean_query_builder()
+builder_3.add(querybuilder.get_term_query("dog"), should)
+builder_3.add(querybuilder.get_term_query("cat"), must_not)
+query_3 = builder_3.build()
+hits_3 = searcher.search(query_3)
+
+# %% Query 4 - (bm25 OR tf-idf) AND retrieval
+inner_builder_4 = querybuilder.get_boolean_query_builder()
+inner_builder_4.add(querybuilder.get_term_query("bm25"), should)
+inner_builder_4.add(querybuilder.get_term_query("tf-idf"), should)
+inner_query_4 = inner_builder_4.build()
+
+outer_builder_4 = querybuilder.get_boolean_query_builder()
+outer_builder_4.add(inner_query_4, must)
+outer_builder_4.add(querybuilder.get_term_query("retrieval"), must)
+query_4 = outer_builder_4.build()
+hits_4 = searcher.search(query_4)
+
+# %% Query 5 - dog OR (cat AND mouse)
+inner_builder_5 = querybuilder.get_boolean_query_builder()
+inner_builder_5.add(querybuilder.get_term_query("cat"), must)
+inner_builder_5.add(querybuilder.get_term_query("mouse"), must)
+inner_query_5 = inner_builder_5.build()
+
+outer_builder_5 = querybuilder.get_boolean_query_builder()
+outer_builder_5.add(inner_query_5, should)
+outer_builder_5.add(querybuilder.get_term_query("dog"), should)
+query_5 = outer_builder_5.build()
+hits_5 = searcher.search(query_5)
+
+# %% Query 6 - retrieval AND (neural OR bm25)
+inner_builder_6 = querybuilder.get_boolean_query_builder()
+inner_builder_6.add(querybuilder.get_term_query("neural"), should)
+inner_builder_6.add(querybuilder.get_term_query("bm25"), should)
+inner_query_6 = inner_builder_6.build()
+
+outer_builder_6 = querybuilder.get_boolean_query_builder()
+outer_builder_6.add(inner_query_6, must)
+outer_builder_6.add(querybuilder.get_term_query("retrieval"), must)
+query_6 = outer_builder_6.build()
+hits_6 = searcher.search(query_6)
+
+# %% Tampilkan hasil
+hits = [
+   hits_1,
+   hits_2,
+   hits_3,
+   hits_4,
+   hits_5,
+   hits_6
+]
+
+for i in range(len(queries)):
+   display_results(queries[i], hits[i])
