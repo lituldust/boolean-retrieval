@@ -84,8 +84,8 @@ queries = [
   'dog cat', # termasuk 'dog AND cat' dan 'dog OR cat'
   'dog',
   'bm25 tf-idf retrieval',
-  'dog cat mouse)',
-  'retrieval neural bm25)'
+  'dog cat mouse',
+  'retrieval neural bm25'
 ]
 # %% Fungsi untuk print hasil pencarian
 def display_results(query, hits):
@@ -105,3 +105,5 @@ def display_results(query, hits):
 for query in queries:
    hits = searcher.search(query)
    display_results(query, hits)
+
+# %%
